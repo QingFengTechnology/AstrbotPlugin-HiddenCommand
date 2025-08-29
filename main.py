@@ -1,15 +1,8 @@
 
-import re
 import sys
 from astrbot.api.star import Context, Star, register
 from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api import logger
-
-def build_cmd_pattern(cmds):
-    if not cmds:
-        return None
-    pat = r'^/(%s)(\s|$)' % '|'.join(re.escape(cmd) for cmd in cmds)
-    return re.compile(pat)
 
 @register("astrbot_plugin_restrict_syscmd", "木有知", 
           "系统指令权限控制插件 - 防止非管理员恶意重置和探测机器人身份", 
@@ -19,26 +12,26 @@ class RestrictSysCmd(Star):
     def __init__(self, context: Context, config=None):
         super().__init__(context)
         self.config = config or {}
-        self.blocked_cmds = self.config.get("blocked_commands", [
-            "new", "reset", "help", "start", "stop", "about", "status", "config", "settings"
-        ])
-        self.cmd_pattern = build_cmd_pattern(self.blocked_cmds)
+        self.blocked_cmds = set(self.config.get("blocked_commands", [
+            "new", "reset", "help", "start", "stop", "about", "status", "config", "settings", "plugin", "plugins_ls"
+        ]))
         logger.info(f"restrict_syscmd 插件已加载，拦截指令: {self.blocked_cmds}")
         logger.info(f"支持格式: /command、command（私聊）、@机器人 command（群聊）")
 
-    def is_restricted_command(self, msg, event):
+    def is_restricted_command(self, msg):
         """检测是否为受限制的系统命令（支持多种格式）"""
         clean_msg = msg.strip()
         
-        # 检查各种命令格式
-        for blocked_cmd in self.blocked_cmds:
-            # 格式1: /command
-            if clean_msg == f"/{blocked_cmd}" or clean_msg.startswith(f"/{blocked_cmd} "):
-                return True, f"/{blocked_cmd}"
+        # 检查斜杠格式: /command
+        if clean_msg.startswith("/"):
+            cmd_part = clean_msg[1:].split()[0] if " " in clean_msg else clean_msg[1:]
+            if cmd_part in self.blocked_cmds:
+                return True, f"/{cmd_part}"
                 
-            # 格式2: 纯command（私聊或@消息）
-            if clean_msg == blocked_cmd or clean_msg.startswith(f"{blocked_cmd} "):
-                return True, blocked_cmd
+        # 检查纯命令格式: command （私聊和@消息）
+        cmd_part = clean_msg.split()[0] if " " in clean_msg else clean_msg
+        if cmd_part in self.blocked_cmds:
+            return True, cmd_part
                 
         return False, None
 
@@ -54,7 +47,7 @@ class RestrictSysCmd(Star):
         logger.info(f"🔍 [DEBUG] 事件当前状态: 已停止={event.is_stopped()}")
         
         # 检查是否为受限制的系统指令
-        is_restricted, matched_format = self.is_restricted_command(msg, event)
+        is_restricted, matched_format = self.is_restricted_command(msg)
         
         logger.info(f"🔍 [DEBUG] 命令检测结果: {is_restricted}")
         logger.info(f"🔍 [DEBUG] 匹配格式: {matched_format}")
