@@ -1,0 +1,5 @@
+name: astrbot_plugin_restrict_syscmd
+version: 0.2.0
+description: 系统指令权限控制插件 - 防止非管理员恶意重置和探测机器人身份
+author: 木有知
+repo: https://github.com/muyouzhi6/astrbot_plugin_restrict_syscmd
