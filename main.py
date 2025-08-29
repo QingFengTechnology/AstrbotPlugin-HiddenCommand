@@ -15,23 +15,26 @@ class RestrictSysCmd(Star):
         self.blocked_cmds = set(self.config.get("blocked_commands", [
             "new", "reset", "help", "start", "stop", "about", "status", "config", "settings", "plugin", "plugins_ls"
         ]))
-        logger.info(f"restrict_syscmd 插件已加载，拦截指令: {self.blocked_cmds}")
+        self.command_prefixes = self.config.get("command_prefixes", ["/", ":", "!", "#", ""])
+        logger.info(f"restrict_syscmd 插件已加载，拦截指令: {self.blocked_cmds}，前缀: {self.command_prefixes}")
 
     def is_restricted_command(self, msg: str):
-        """检测是否为受限制的系统命令（支持多种格式）"""
+        """检测是否为受限制的系统命令（支持多种格式和自定义前缀）"""
         clean_msg = msg.strip()
-        # 统一移除可选的'/'前缀
-        if clean_msg.startswith('/'):
-            command_text = clean_msg[1:]
-        else:
-            command_text = clean_msg
-        # 如果消息为空（例如仅输入'/'），则不是有效指令
+        matched_prefix = None
+        command_text = clean_msg
+        for prefix in sorted(self.command_prefixes, key=lambda x: -len(x)):
+            if prefix and clean_msg.startswith(prefix):
+                matched_prefix = prefix
+                command_text = clean_msg[len(prefix):]
+                break
+            elif prefix == "" and not matched_prefix:
+                matched_prefix = ""
+                command_text = clean_msg
         if not command_text:
             return False, None
-        # 提取指令部分（第一个空格前的内容）
         cmd_part = command_text.split(maxsplit=1)[0]
         if cmd_part in self.blocked_cmds:
-            # 为了日志记录，可以返回用户输入的原始格式
             original_cmd_format = clean_msg.split(maxsplit=1)[0]
             return True, original_cmd_format
         return False, None
