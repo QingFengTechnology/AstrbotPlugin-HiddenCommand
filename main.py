@@ -17,21 +17,23 @@ class RestrictSysCmd(Star):
         ]))
         logger.info(f"restrict_syscmd 插件已加载，拦截指令: {self.blocked_cmds}")
 
-    def is_restricted_command(self, msg):
+    def is_restricted_command(self, msg: str):
         """检测是否为受限制的系统命令（支持多种格式）"""
         clean_msg = msg.strip()
-        
-        # 检查斜杠格式: /command
-        if clean_msg.startswith("/"):
-            cmd_part = clean_msg[1:].split()[0] if " " in clean_msg else clean_msg[1:]
-            if cmd_part in self.blocked_cmds:
-                return True, f"/{cmd_part}"
-                
-        # 检查纯命令格式: command （私聊和@消息）
-        cmd_part = clean_msg.split()[0] if " " in clean_msg else clean_msg
+        # 统一移除可选的'/'前缀
+        if clean_msg.startswith('/'):
+            command_text = clean_msg[1:]
+        else:
+            command_text = clean_msg
+        # 如果消息为空（例如仅输入'/'），则不是有效指令
+        if not command_text:
+            return False, None
+        # 提取指令部分（第一个空格前的内容）
+        cmd_part = command_text.split(maxsplit=1)[0]
         if cmd_part in self.blocked_cmds:
-            return True, cmd_part
-                
+            # 为了日志记录，可以返回用户输入的原始格式
+            original_cmd_format = clean_msg.split(maxsplit=1)[0]
+            return True, original_cmd_format
         return False, None
 
     @filter.event_message_type(filter.EventMessageType.ALL, priority=sys.maxsize-1)
