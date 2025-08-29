@@ -3,7 +3,7 @@
     "description": "需要权限控制的系统指令列表（防止恶意重置和身份探测）",
     "type": "list",
     "default": [
-      "new", "reset", "help", "start", "stop", "about", "status", "config", "settings"
+      "new", "reset", "help", "start", "stop", "about", "status", "config", "settings", "plugin", "plugins_ls"
     ],
     "item_type": "string",
     "hint": "输入需要限制的指令名（无需加/），如 reset、help 等敏感指令。被拦截的指令将静默阻止，不提供任何回复"
