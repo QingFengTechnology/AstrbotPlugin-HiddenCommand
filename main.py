@@ -19,7 +19,7 @@ class RestrictSysCmd(Star):
         logger.info(f"restrict_syscmd 插件已加载，拦截指令: {self.blocked_cmds}，前缀: {self.command_prefixes}")
 
     def is_restricted_command(self, msg: str):
-        """检测是否为受限制系统命令（支持多种格式和自定义前缀）"""
+        """检测是否为受限制的系统命令（支持多种格式和自定义前缀）"""
         clean_msg = msg.strip()
         matched_prefix = None
         command_text = clean_msg
