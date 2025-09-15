@@ -5,7 +5,7 @@ from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api import logger
 
 @register("astrbot_plugin_restrict_syscmd", "木有知", 
-          "系统指令权限控制插件 - 防止非管理员恶意重置和探测机器人身份", 
+          "系统指令权限控制插件 - 防止非管理员恶意重置和探测机器人身份，静默处理", 
           "0.2.0", 
           "https://github.com/muyouzhi6/astrbot_plugin_restrict_syscmd")
 class RestrictSysCmd(Star):
