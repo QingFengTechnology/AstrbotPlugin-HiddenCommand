@@ -1,5 +1,6 @@
-name: astrbot_plugin_restrict_syscmd
-version: 0.2.0
-description: 限制仅管理员可用某些指令（支持自定义），防止bot被测，防止被恶意new、reset等
-author: 木有知
-repo: https://github.com/muyouzhi6/astrbot_plugin_restrict_syscmd
+name: astrbot_plugin_hidden_command
+display_name: HiddenCommand
+version: v1.0.0
+description: 阻止某些命令被触发，支持设定管理员放行。
+author: QingFeng
+repo: https://github.com/QingFengTechnology/AstrbotPlugin-HiddenCommand
