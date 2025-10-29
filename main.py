@@ -11,10 +11,9 @@ class HiddenCommand(Star):
         self.command_prefixes = self.config.get("CommandPrefixes")
         self.release_admin = self.config.get("ReleaseAdministrator", True)
         logger.info(f"[HiddenCommand] 插件已启动，将拦截前缀为 {self.command_prefixes} 的这些指令: {self.blocked_cmds}。")
-        logger.info(f"[HiddenCommand] 管理员限制设置: {'放行' if self.release_admin else '限制'}")
 
     def is_restricted_command(self, msg: str):
-        """检测是否为受限制的系统命令（支持多种格式和自定义前缀）"""
+        """检测是否为受限制的系统命令"""
         clean_msg = msg.strip()
         matched_prefix = None
         command_text = clean_msg
@@ -45,10 +44,10 @@ class HiddenCommand(Star):
             release_admin = self.config.get("ReleaseAdministrator", True)
             
             if event.is_admin() and release_admin:
-                logger.info(f"[HiddenCommand] 管理员放行: {user_info} | 指令: '{matched_format}'。")
+                logger.debug(f"[HiddenCommand] 已检测到指令被触发，但触发用户为管理员，放行命令。")
                 return
             else:
-                logger.info(f"[HiddenCommand] 拦截: {user_info} | 指令: '{matched_format}' | 管理员限制: {not release_admin}。")
+                logger.info(f"[HiddenCommand] 已拦截指令 {matched_format}。")
                 event.stop_event()
                 return
 
