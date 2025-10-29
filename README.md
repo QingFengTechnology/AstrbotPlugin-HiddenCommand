@@ -12,3 +12,7 @@
 ## 使用
 
 安装插件完成后，在配置设定需要拦截的前缀与命令，保存并重载即可。
+
+## 鸣谢
+
+- [木有知](https://github.com/muyouzhi6)，此插件为[其仓库](https://github.com/muyouzhi6/astrbot_plugin_restrict_syscmd)的分叉版本。
