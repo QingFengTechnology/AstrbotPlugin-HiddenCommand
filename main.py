@@ -7,8 +7,8 @@ class HiddenCommand(Star):
     def __init__(self, context: Context, config=None):
         super().__init__(context)
         self.config = config or {}
-        self.blocked_cmds = set(self.config.get("blocked_commands"))
-        self.command_prefixes = self.config.get("command_prefixes")
+        self.blocked_cmds = set(self.config.get("HiddenCommands"))
+        self.command_prefixes = self.config.get("CommandPrefixes")
         logger.info(f"[HiddenCommand] 插件已启动，将拦截前缀为 {self.command_prefixes} 的这些指令: {self.blocked_cmds}。")
 
     def is_restricted_command(self, msg: str):
