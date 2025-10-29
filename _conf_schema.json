@@ -1,4 +1,10 @@
 {
+  "ReleaseAdministrator": {
+    "type": "bool",
+    "description": "管理员不受限制",
+    "hint": "允许管理员触发对应命令。",
+    "default": false
+  },
   "CommandPrefixes": {
     "description": "阻止指令前缀",
     "type": "list",
