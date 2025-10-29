@@ -35,6 +35,7 @@ class HiddenCommand(Star):
 
     @filter.event_message_type(filter.EventMessageType.ALL, priority=sys.maxsize-1)
     async def restrict_syscmd_handler(self, event: AstrMessageEvent):
+        """检查命令是否应被拦截"""
         msg = event.get_message_str().strip()
         is_restricted, matched_format = self.is_restricted_command(msg)
         if is_restricted:
