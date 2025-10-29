@@ -1,6 +1,6 @@
 name: astrbot_plugin_hidden_command
-display_name: HiddenCommand
-version: v1.0.0
+display_name: 命令拦截器
+version: v1.0.1
 desc: 阻止某些命令被触发，支持设定管理员放行。
 author: QingFeng
 repo: https://github.com/QingFengTechnology/AstrbotPlugin-HiddenCommand
