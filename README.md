@@ -1,8 +1,8 @@
-# AstrBotPlugin-HiddenCommand
+# AstrBotPlugin 命令拦截器
 
 ![AstrbotPlugin-HiddenCommand](https://socialify.git.ci/QingFengTechnology/AstrbotPlugin-HiddenCommand/image?description=1&font=KoHo&language=1&name=1&pattern=Solid&theme=Auto)
 
-可通过本插件拦截某些无法被禁用的命令，例如 Astrbot 默认的 help，来提供更高自定义性。\
+可通过本插件拦截任意命令，例如 Astrbot 默认的 help，来提供更高的自定义性。\
 支持设定管理员绕过拦截。
 
 ## 安装
