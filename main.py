@@ -38,9 +38,7 @@ class HiddenCommand(Star):
         """检查命令是否应被拦截"""
         msg = event.get_message_str().strip()
         is_restricted, matched_format = self.is_restricted_command(msg)
-        if is_restricted:
-            user_info = f"{event.get_sender_name()}({event.get_sender_id()})"
-            
+        if is_restricted:            
             if event.is_admin() and self.release_admin:
                 logger.debug(f"[HiddenCommand] 已检测到命令 {matched_format} 被触发，但调用者为管理员，忽略。")
                 return
@@ -48,6 +46,3 @@ class HiddenCommand(Star):
                 logger.info(f"[HiddenCommand] 已拦截命令 {matched_format}。")
                 event.stop_event()
                 return
-
-    async def terminate(self):
-        logger.info("[HiddenCommand] 插件已停止。")
