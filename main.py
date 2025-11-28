@@ -1,15 +1,15 @@
 import sys
 from astrbot.api.star import Context, Star
 from astrbot.api.event import filter, AstrMessageEvent
-from astrbot.api import logger
+from astrbot.api import AstrBotConfig, logger
 
 class HiddenCommand(Star):
-    def __init__(self, context: Context, config=None):
+    def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
-        self.config = config or {}
-        self.blocked_cmds = set(self.config.get("HiddenCommands"))
-        self.command_prefixes = self.config.get("CommandPrefixes")
-        self.release_admin = self.config.get("ReleaseAdministrator", True)
+        self.config: dict = config
+        self.blocked_cmds: list = self.config.get("HiddenCommands")
+        self.command_prefixes: list = self.config.get("CommandPrefixes")
+        self.release_admin: bool = self.config.get("ReleaseAdministrator")
         logger.info(f"[HiddenCommand] 插件已启动，将拦截前缀为 {self.command_prefixes} 的这些指令: {self.blocked_cmds}。")
 
     def is_restricted_command(self, msg: str):
@@ -41,10 +41,7 @@ class HiddenCommand(Star):
         if is_restricted:
             user_info = f"{event.get_sender_name()}({event.get_sender_id()})"
             
-            # 检查管理员是否受限制
-            release_admin = self.config.get("ReleaseAdministrator", True)
-            
-            if event.is_admin() and release_admin:
+            if event.is_admin() and self.release_admin:
                 logger.debug(f"[HiddenCommand] 已检测到指令被触发，但触发用户为管理员，放行命令。")
                 return
             else:
